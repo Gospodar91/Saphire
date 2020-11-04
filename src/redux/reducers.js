@@ -1,11 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
 import * as action from "./actions";
-const initialState = {
-  name: "Sergei",
-  token: false,
-};
+const initialState = {};
 export const registerReducer = createReducer(initialState, {
-  [action.addToken]: (state, { payload }) => {
-    return { ...state, token: payload };
+  [action.addUserInfo]: (state, { payload }) => {
+    return { ...state, ...payload };
   },
 });

@@ -1,3 +1,3 @@
 export const Type = {
-  ADD_TOKEN: "ADD_TOKEN",
+  ADD_USE_INFO: "ADD_USE_INFO",
 };
