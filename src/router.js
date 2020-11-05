@@ -66,7 +66,7 @@ function UserProfileFinction() {
           <Route path="/price" component={Price} />
           <Route path="/registration" component={Registration} />
           <Route path="/userProfile" component={UserProfile} />
-          <Redirect to="/userProfile" />
+          <Redirect to="/" />
         </Switch>
       </Suspense>
     </>

@@ -4,10 +4,12 @@ import Header from "./components/Header";
 import { router } from "./router";
 
 function App() {
-  const routing = router(true, true);
+  const token = true;
+  const adminID = false;
+  const routing = router(token, adminID);
   return (
     <>
-      <Header />
+      <Header token={token} adminID={adminID} />
       {routing}
       <Footer />
     </>
