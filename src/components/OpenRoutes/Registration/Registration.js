@@ -4,23 +4,29 @@ import { Formik, Form, Field } from "formik";
 // import getValidationSchema from "./ValidationSchemaStageOne";
 import { addUserInfo } from "../../../redux/actions";
 import { Link } from "react-router-dom";
+import { register_user_request } from "../../../apiRequest/requests";
 
 export default function Registration() {
   const dispatch = useDispatch();
 
-  function handleNextButton(values) {
+  async function handleNextButton(values) {
     dispatch(addUserInfo(values));
+    try {
+      const response = await register_user_request(values);
+      console.log("response", response);
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 
   return (
     <div>
-      <Link to="adminPanel"> To adminPanel</Link>
       <Formik
         initialValues={{
           phone: "",
-          firstName: "",
-          secondName: "",
-          lastName: "",
+          first_name: "",
+          second_name: "",
+          last_name: "",
           email: "",
         }}
         onSubmit={handleNextButton}
@@ -32,24 +38,24 @@ export default function Registration() {
               inputProps={{
                 maxLength: 20,
               }}
-              label="firstName"
-              name="firstName"
+              label="first_name"
+              name="first_name"
               placeholder=" "
             />
             <Field
               inputProps={{
                 maxLength: 20,
               }}
-              label="secondName"
-              name="secondName"
+              label="second_name"
+              name="second_name"
               placeholder=" "
             />
             <Field
               inputProps={{
                 maxLength: 20,
               }}
-              label="lastName"
-              name="lastName"
+              label="last_name"
+              name="last_name"
               placeholder=" "
             />
             <Field
