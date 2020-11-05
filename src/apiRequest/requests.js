@@ -1,7 +1,8 @@
 import axios from "axios";
-export function register_user_request(userData) {
+export function register_new_user(userData) {
+  console.log("userData", userData);
   const requestBody = {
-    userData,
+    ...userData,
   };
 
   const config = {
@@ -10,6 +11,6 @@ export function register_user_request(userData) {
       "Access-Control-Allow-Origin": "*",
     },
   };
-  console.log(requestBody);
-  return axios.post(`/api/register_user_request`, requestBody, config);
+
+  return axios.post(`http://localhost:3001/add_new_user`, requestBody, config);
 }

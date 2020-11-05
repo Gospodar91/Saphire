@@ -4,15 +4,15 @@ import { Formik, Form, Field } from "formik";
 // import getValidationSchema from "./ValidationSchemaStageOne";
 import { addUserInfo } from "../../../redux/actions";
 import { Link } from "react-router-dom";
-import { register_user_request } from "../../../apiRequest/requests";
+import { register_new_user } from "../../../apiRequest/requests";
 
 export default function Registration() {
   const dispatch = useDispatch();
 
   async function handleNextButton(values) {
-    dispatch(addUserInfo(values));
     try {
-      const response = await register_user_request(values);
+      const response = await register_new_user(values);
+      if (response.status === 200) dispatch(addUserInfo(response.data));
       console.log("response", response);
     } catch (error) {
       console.log("error", error);
