@@ -12,6 +12,7 @@ class validations {
       last_name: Joi.string(),
       phone: Joi.string(),
       second_name: Joi.string(),
+      password: Joi.string(),
     });
     const validationResult = rules.validate(req.body);
     if (validationResult.error) {

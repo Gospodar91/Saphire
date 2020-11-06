@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const contactsActions = require("./routes/route");
+const routes = require("./routes/route");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 require("dotenv").config();
@@ -31,7 +31,7 @@ class MongoDBServer {
     this.server.use(cors({ origin: true }));
   };
   initRout = () => {
-    this.server.use("/", contactsActions);
+    this.server.use("/", routes);
   };
   initDataBase = () => {
     try {
