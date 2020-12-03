@@ -94,3 +94,19 @@ exports.loginUser = async (req, res, next) => {
     token: authToken,
   });
 };
+exports.logOutUser = async (req, res, next) => {
+  const id = req.body.id;
+  if (!id) {
+    res.status(404).json({
+      message: "User not found",
+    });
+    throw new Error("User not found");
+  }
+  const user = await model_DB_USER_DATABASE.findByIdAndUpdate(id, {
+    $set: {
+      token: null,
+    },
+  });
+
+  return res.status(200).send("logout user");
+};

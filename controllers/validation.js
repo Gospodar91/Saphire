@@ -34,5 +34,16 @@ class validations {
     }
     next();
   };
+  userLogOut = (req, res, next) => {
+    const rules = Joi.object({
+      id: Joi.string().required(),
+    });
+    const validationResult = rules.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json(validationResult.error);
+    }
+    next();
+  };
 }
+
 module.exports = new validations();

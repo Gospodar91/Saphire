@@ -8,6 +8,7 @@ console.log("RUTE---------------------");
 // router.get("/:contactId", db_Actions.findContact);
 router.post("/add_new_user", validations.register_new_userValidation, db_Actions.register_new_user);
 router.post("/login_user", validations.userLogin, db_Actions.loginUser);
+router.post("/logout_user", validations.userLogOut, db_Actions.logOutUser);
 // router.delete('/:contactId',validations.validateRequest,db_Actions.deleteContact)
 
 // router.patch(
