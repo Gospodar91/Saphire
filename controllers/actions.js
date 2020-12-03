@@ -1,5 +1,5 @@
 const { Error } = require("mongoose");
-const model_DB_ADD_USER = require("../model/model_user_databaser");
+const model_DB_USER_DATABASE = require("../model/model_user_databaser");
 
 const helperFunction = require("./helpersForServer/helperFunctions");
 
@@ -7,7 +7,7 @@ exports.register_new_user = async (req, res, next) => {
   try {
     const { email, password, first_name, last_name, phone, second_name } = req.body;
 
-    const existUser = await model_DB_ADD_USER.findOne({
+    const existUser = await model_DB_USER_DATABASE.findOne({
       email,
     });
     if (existUser) {
@@ -16,7 +16,7 @@ exports.register_new_user = async (req, res, next) => {
       });
     }
     const hashPass = await helperFunction.createHashPass(password);
-    const newUser = await model_DB_ADD_USER.create({
+    const newUser = await model_DB_USER_DATABASE.create({
       email: email,
       password: hashPass,
       first_name,
@@ -24,28 +24,30 @@ exports.register_new_user = async (req, res, next) => {
       phone,
       second_name,
     });
-    // const authToken = await helperFunction.createToken(newUser);
-    // await model_DB_ADD_USER.findByIdAndUpdate(
-    //   newUser._id,
-    //   {
-    //     $set: {
-    //       token: authToken,
-    //     },
-    //   },
-    //   {
-    //     new: true,
-    //   },
-    // );
-
+    const isValidUser = await model_DB_USER_DATABASE.findOne({
+      email,
+    });
+    const authToken = await helperFunction.createToken(isValidUser);
+    await model_DB_USER_DATABASE.findByIdAndUpdate(
+      isValidUser._id,
+      {
+        $set: {
+          token: authToken,
+        },
+      },
+      {
+        new: true,
+      },
+    );
     return res.status(201).json({
       id: newUser._id,
-      // email: newUser.email,
-      // subscription: newUser.subscription,
-      // first_name: newUser.first_name,
-      // last_name: newUser.last_name,
-      // phone: newUser.phone,
-      // second_name: newUser.second_name,
-      // token: authToken,
+      email: newUser.email,
+      subscription: newUser.subscription,
+      first_name: newUser.first_name,
+      last_name: newUser.last_name,
+      phone: newUser.phone,
+      second_name: newUser.second_name,
+      token: authToken,
     });
   } catch (error) {
     console.log("error---------------------", error);
@@ -55,7 +57,7 @@ exports.register_new_user = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
-  const isValidUser = await model_DB_ADD_USER.findOne({
+  const isValidUser = await model_DB_USER_DATABASE.findOne({
     email,
   });
   if (!isValidUser) {
@@ -72,23 +74,23 @@ exports.loginUser = async (req, res, next) => {
     });
     throw new Error("Email or password incorrect");
   }
-  // const authToken = await helperFunction.createToken(isValidUser)
-  // await userHW4Model.findByIdAndUpdate(isValidUser._id, {
-  //   $set: {
-  //     token: authToken
-  //   }
-  // }, {
-  //   new: true
-  // })
-
-  // await res.cookie('token', authToken, {
-  //   httpOnly: true
-  // })
+  const authToken = await helperFunction.createToken(isValidUser);
+  await model_DB_USER_DATABASE.findByIdAndUpdate(
+    isValidUser._id,
+    {
+      $set: {
+        token: authToken,
+      },
+    },
+    {
+      new: true,
+    },
+  );
 
   return res.status(200).json({
     id: isValidUser._id,
     email: isValidUser.email,
     // subscription: isValidUser.subscription,
-    // token: authToken
+    token: authToken,
   });
 };
