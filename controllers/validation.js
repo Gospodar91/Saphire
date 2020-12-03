@@ -23,5 +23,16 @@ class validations {
     }
     next();
   };
+  userLogin = (req, res, next) => {
+    const rules = Joi.object({
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+    });
+    const validationResult = rules.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json(validationResult.error);
+    }
+    next();
+  };
 }
 module.exports = new validations();

@@ -1,4 +1,6 @@
-const model_DB_ADD_USER = require("../model/model_add_user");
+const { Error } = require("mongoose");
+const model_DB_ADD_USER = require("../model/model_user_databaser");
+
 const helperFunction = require("./helpersForServer/helperFunctions");
 
 exports.register_new_user = async (req, res, next) => {
@@ -37,16 +39,56 @@ exports.register_new_user = async (req, res, next) => {
 
     return res.status(201).json({
       id: newUser._id,
-      email: newUser.email,
-      subscription: newUser.subscription,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name,
-      phone: newUser.phone,
-      second_name: newUser.second_name,
+      // email: newUser.email,
+      // subscription: newUser.subscription,
+      // first_name: newUser.first_name,
+      // last_name: newUser.last_name,
+      // phone: newUser.phone,
+      // second_name: newUser.second_name,
       // token: authToken,
     });
   } catch (error) {
     console.log("error---------------------", error);
     res.status(403).send();
   }
+};
+
+exports.loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+  const isValidUser = await model_DB_ADD_USER.findOne({
+    email,
+  });
+  if (!isValidUser) {
+    res.status(401).json({
+      message: "incorrect email or password",
+    });
+    throw new Error("Email or password incorrect");
+  }
+  const isPassValid = await helperFunction.comparePass(password, isValidUser.password);
+
+  if (!isPassValid) {
+    res.status(401).json({
+      message: "incorrect email or password",
+    });
+    throw new Error("Email or password incorrect");
+  }
+  // const authToken = await helperFunction.createToken(isValidUser)
+  // await userHW4Model.findByIdAndUpdate(isValidUser._id, {
+  //   $set: {
+  //     token: authToken
+  //   }
+  // }, {
+  //   new: true
+  // })
+
+  // await res.cookie('token', authToken, {
+  //   httpOnly: true
+  // })
+
+  return res.status(200).json({
+    id: isValidUser._id,
+    email: isValidUser.email,
+    // subscription: isValidUser.subscription,
+    // token: authToken
+  });
 };
